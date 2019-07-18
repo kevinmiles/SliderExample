@@ -1,0 +1,28 @@
+﻿@page "/"
+@inject IJSRuntime JsRuntime;
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<h2>Here is the Blazor slider:</h2>
+
+<input type="range" min="0" max="99" @bind="value" @bind:event="oninput"/>
+<p>Value: @value</p>
+
+<h2>Here is the JavaScript slider:</h2>
+
+<input type="range" min="0" value="0" max="99" @ref="inputElem"/>
+<p>Value: <span @ref="outputElem">0</span></p>
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+@code { 
+    protected override void OnAfterRender()
+    {
+        base.OnAfterRender();
+        JsRuntime.InvokeAsync<object>("slider.attach", inputElem, outputElem);
+    }
+    ElementRef inputElem;
+    ElementRef outputElem;
+    int value;
+}
